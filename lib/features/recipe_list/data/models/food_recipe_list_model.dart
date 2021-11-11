@@ -1,4 +1,6 @@
-class FoodRecipeListModel {
+import 'package:equatable/equatable.dart';
+
+class FoodRecipeListModel extends Equatable {
   final int count;
   final String next;
   final String previous;
@@ -23,15 +25,18 @@ class FoodRecipeListModel {
       result: recipeList,
     );
   }
+
+  @override
+  List<Object?> get props => [count, next, previous, result];
 }
 
-class FoodRecipeModel {
+class FoodRecipeModel extends Equatable {
   final int pk;
   final String title;
   final String publisher;
   final String featuredImage;
 
-  FoodRecipeModel(
+  const FoodRecipeModel(
       {required this.pk,
       required this.title,
       required this.publisher,
@@ -44,4 +49,7 @@ class FoodRecipeModel {
         publisher: json['publisher'],
         featuredImage: json['featured_image']);
   }
+
+  @override
+  List<Object?> get props => [pk, title, publisher, featuredImage];
 }
