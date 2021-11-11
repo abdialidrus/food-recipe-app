@@ -17,7 +17,7 @@ class FoodRecipeListBloc
     extends Bloc<FoodRecipeListEvent, FoodRecipeListState> {
   final GetFoodRecipeList getFoodRecipeList;
 
-  FoodRecipeListBloc({required this.getFoodRecipeList}) : super(Initial());
+  FoodRecipeListBloc({required this.getFoodRecipeList}) : super(Loading());
 
   @override
   Stream<FoodRecipeListState> mapEventToState(

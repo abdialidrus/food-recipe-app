@@ -4,12 +4,12 @@ class FoodRecipeListModel extends FoodRecipeList {
   const FoodRecipeListModel({
     required int count,
     required String next,
-    required String previous,
+    required String? previous,
     required List<FoodRecipe> result,
   }) : super(count: count, next: next, previous: previous, result: result);
 
   factory FoodRecipeListModel.fromJson(Map<String, dynamic> json) {
-    var recipeListFromJson = json['result'] as List;
+    var recipeListFromJson = json['results'] as List;
     List<FoodRecipe> recipeList =
         recipeListFromJson.map((i) => FoodRecipe.fromJson(i)).toList();
 
