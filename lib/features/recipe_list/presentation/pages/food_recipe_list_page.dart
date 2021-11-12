@@ -12,10 +12,13 @@ class FoodRecipeListPage extends StatefulWidget {
 }
 
 class _FoodRecipeListPageState extends State<FoodRecipeListPage> {
+  var _controller = TextEditingController();
+  String query = '';
+
   @override
   void initState() {
     const page = 1;
-    const query = '';
+    const query = 'chicken';
     BlocProvider.of<FoodRecipeListBloc>(context)
         .add(const GetFoodRecipeListEvent(page, query));
     super.initState();
@@ -29,24 +32,64 @@ class _FoodRecipeListPageState extends State<FoodRecipeListPage> {
       ),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: BlocBuilder<FoodRecipeListBloc, FoodRecipeListState>(
-              builder: (context, state) {
-            if (state is Loading) {
-              return const LoadingWidget();
-            } else if (state is Error) {
-              return Text(state.message);
-            } else if (state is Loaded) {
-              return RecipeList(
-                recipeList: state.recipeList.result,
-              );
-            } else {
-              return const Text('unexpected error');
-            }
-          }),
+          padding: const EdgeInsets.all(5),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              const SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  controller: _controller,
+                  keyboardType: TextInputType.text,
+                  decoration: const InputDecoration(
+                    labelText: "Search",
+                    hintText: "Search",
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(25.0),
+                      ),
+                    ),
+                  ),
+                  onChanged: (value) {
+                    query = value;
+                  },
+                  onSubmitted: (_) {
+                    searchRecipe();
+                  },
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              BlocBuilder<FoodRecipeListBloc, FoodRecipeListState>(
+                builder: (context, state) {
+                  if (state is Loading) {
+                    return const LoadingWidget();
+                  } else if (state is Error) {
+                    return Text(state.message);
+                  } else if (state is Loaded) {
+                    return RecipeList(
+                      recipeList: state.recipeList.result,
+                    );
+                  } else {
+                    return const Text('unexpected error');
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  void searchRecipe() {
+    BlocProvider.of<FoodRecipeListBloc>(context)
+        .add(GetFoodRecipeListEvent(1, query));
   }
 }
 
@@ -57,37 +100,39 @@ class RecipeList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: recipeList.length,
-      itemBuilder: (context, index) {
-        return Center(
-            child: Card(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                height: 200.0,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(5),
-                    topRight: Radius.circular(5),
-                  ),
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(
-                      recipeList[index].featuredImage,
+    return Flexible(
+      child: ListView.builder(
+        itemCount: recipeList.length,
+        itemBuilder: (context, index) {
+          return Center(
+              child: Card(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  height: 200.0,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(5),
+                      topRight: Radius.circular(5),
+                    ),
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(
+                        recipeList[index].featuredImage,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              ListTile(
-                title: Text(recipeList[index].title),
-                subtitle: Text(recipeList[index].publisher),
-              )
-            ],
-          ),
-        ));
-      },
+                ListTile(
+                  title: Text(recipeList[index].title),
+                  subtitle: Text(recipeList[index].publisher),
+                )
+              ],
+            ),
+          ));
+        },
+      ),
     );
   }
 }
