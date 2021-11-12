@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:food_recipe/features/recipe_detail/presentation/pages/food_recipe_detail_page.dart';
 import 'package:food_recipe/features/recipe_list/domain/entities/food_recipe_list.dart';
 import 'package:food_recipe/features/recipe_list/presentation/bloc/food_recipe_list_bloc.dart';
 import 'package:food_recipe/features/recipe_list/presentation/widgets/loading_widget.dart';
@@ -106,29 +107,37 @@ class RecipeList extends StatelessWidget {
         itemBuilder: (context, index) {
           return Center(
               child: Card(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  height: 200.0,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(5),
-                      topRight: Radius.circular(5),
-                    ),
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: NetworkImage(
-                        recipeList[index].featuredImage,
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const FoodRecipeDetailPage()));
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    height: 200.0,
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(5),
+                        topRight: Radius.circular(5),
+                      ),
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: NetworkImage(
+                          recipeList[index].featuredImage,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                ListTile(
-                  title: Text(recipeList[index].title),
-                  subtitle: Text(recipeList[index].publisher),
-                )
-              ],
+                  ListTile(
+                    title: Text(recipeList[index].title),
+                    subtitle: Text(recipeList[index].publisher),
+                  )
+                ],
+              ),
             ),
           ));
         },
