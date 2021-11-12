@@ -6,8 +6,6 @@ import 'package:food_recipe/core/error/failures.dart';
 import 'package:dartz/dartz.dart';
 import 'package:food_recipe/features/recipe_list/domain/repositories/food_recipe_list_repository.dart';
 
-typedef Future<FoodRecipeList> _FoodRecipeListGetter();
-
 class FoodRecipeListRepositoryImpl implements FoodRecipeListRepository {
   final FoodRecipeListRemoteDataSource remoteDataSource;
   final NetworkInfo networkInfo;
@@ -20,17 +18,10 @@ class FoodRecipeListRepositoryImpl implements FoodRecipeListRepository {
   @override
   Future<Either<Failure, FoodRecipeList>> getFoodRecipeList(
       int page, String query) async {
-    return await _getRecipes(() {
-      return remoteDataSource.getFoodRecipeList(page, query);
-    });
-  }
-
-  Future<Either<Failure, FoodRecipeList>> _getRecipes(
-    _FoodRecipeListGetter getFoodRecipeList,
-  ) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteRecipes = await getFoodRecipeList();
+        final remoteRecipes =
+            await remoteDataSource.getFoodRecipeList(page, query);
         return Right(remoteRecipes);
       } on ServerException {
         return Left(ServerFailure());
