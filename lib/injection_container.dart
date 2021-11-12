@@ -1,4 +1,9 @@
 import 'package:data_connection_checker_tv/data_connection_checker.dart';
+import 'package:food_recipe/features/recipe_detail/data/datasources/food_recipe_detail_data_source.dart';
+import 'package:food_recipe/features/recipe_detail/data/repositories/food_recipe_detail_repository_impl.dart';
+import 'package:food_recipe/features/recipe_detail/domain/repositories/food_recipe_detail_repository.dart';
+import 'package:food_recipe/features/recipe_detail/domain/usecases/get_food_recipe_detail.dart';
+import 'package:food_recipe/features/recipe_detail/presentation/bloc/food_recipe_detail_bloc.dart';
 import 'package:food_recipe/features/recipe_list/data/datasources/food_recipe_list_remote_data_source.dart';
 import 'package:food_recipe/features/recipe_list/data/repositories/food_recipe_list_repository_impl.dart';
 import 'package:food_recipe/features/recipe_list/domain/repositories/food_recipe_list_repository.dart';
@@ -16,17 +21,27 @@ Future<void> init() async {
   //! Features - Food Recipe List
   // Bloc
   sl.registerFactory(() => FoodRecipeListBloc(getFoodRecipeList: sl()));
-
   // Use cases
   sl.registerLazySingleton(() => GetFoodRecipeList(sl()));
-
   // Repository
   sl.registerLazySingleton<FoodRecipeListRepository>(() =>
       FoodRecipeListRepositoryImpl(remoteDataSource: sl(), networkInfo: sl()));
-
   // Data sources
   sl.registerLazySingleton<FoodRecipeListRemoteDataSource>(
       () => FoodRecipeListRemoteDataSourceImpl(client: sl()));
+
+  //! Features - Food Recipe Detail
+  // BloC
+  sl.registerFactory(() => FoodRecipeDetailBloc(getFoodRecipeDetail: sl()));
+  // Use cases
+  sl.registerLazySingleton(() => GetFoodRecipeDetail(sl()));
+  // Repository
+  sl.registerLazySingleton<FoodRecipeDetailRepository>(() =>
+      FoodRecipeDetailRepositoryImpl(
+          remoteDataSource: sl(), networkInfo: sl()));
+  // Data sources
+  sl.registerLazySingleton<FoodRecipeDetailRemoteDataSource>(
+      () => FoodRecipeDetailRemoteDataSourceImpl(client: sl()));
 
   //! Core
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));

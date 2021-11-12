@@ -13,15 +13,16 @@ class FoodRecipeListPage extends StatefulWidget {
 }
 
 class _FoodRecipeListPageState extends State<FoodRecipeListPage> {
-  var _controller = TextEditingController();
+  final _controller = TextEditingController();
+  late FoodRecipeListBloc foodRecipeListBloc;
   String query = '';
 
   @override
   void initState() {
     const page = 1;
-    const query = 'chicken';
-    BlocProvider.of<FoodRecipeListBloc>(context)
-        .add(const GetFoodRecipeListEvent(page, query));
+    query = 'chicken';
+    foodRecipeListBloc = BlocProvider.of<FoodRecipeListBloc>(context);
+    foodRecipeListBloc.add(GetFoodRecipeListEvent(page, query));
     super.initState();
   }
 
@@ -89,8 +90,7 @@ class _FoodRecipeListPageState extends State<FoodRecipeListPage> {
   }
 
   void searchRecipe() {
-    BlocProvider.of<FoodRecipeListBloc>(context)
-        .add(GetFoodRecipeListEvent(1, query));
+    foodRecipeListBloc.add(GetFoodRecipeListEvent(1, query));
   }
 }
 

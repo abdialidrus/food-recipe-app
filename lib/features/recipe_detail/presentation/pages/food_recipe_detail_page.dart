@@ -1,5 +1,11 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:food_recipe/features/recipe_detail/domain/entities/food_recipe_detail.dart';
+import 'package:food_recipe/features/recipe_detail/presentation/bloc/food_recipe_detail_bloc.dart';
 import 'package:food_recipe/features/recipe_list/domain/entities/food_recipe_list.dart';
+import 'package:food_recipe/features/recipe_list/presentation/widgets/loading_widget.dart';
 
 class FoodRecipeDetailPage extends StatefulWidget {
   final FoodRecipe foodRecipe;
@@ -12,12 +18,97 @@ class FoodRecipeDetailPage extends StatefulWidget {
 }
 
 class _FoodRecipeDetailPageState extends State<FoodRecipeDetailPage> {
+  late FoodRecipeDetailBloc foodRecipeDetailBloc;
+
+  @override
+  void initState() {
+    foodRecipeDetailBloc = BlocProvider.of<FoodRecipeDetailBloc>(context);
+    foodRecipeDetailBloc.add(GetFoodRecipeDetailEvent(widget.foodRecipe.pk));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.foodRecipe.title),
       ),
+      body: Center(
+        child: BlocBuilder<FoodRecipeDetailBloc, FoodRecipeDetailState>(
+          builder: (context, state) {
+            if (state is Loading) {
+              return const LoadingWidget();
+            } else if (state is Error) {
+              return Text(state.message);
+            } else if (state is Loaded) {
+              return RecipeData(
+                recipeDetail: state.recipeDetail,
+              );
+            } else {
+              return const Text('unexpected error');
+            }
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class RecipeData extends StatelessWidget {
+  final FoodRecipeDetail recipeDetail;
+  const RecipeData({Key? key, required this.recipeDetail}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Container(
+          height: 250.0,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: NetworkImage(
+                recipeDetail.featuredImage,
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Text(
+                      recipeDetail.title,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 25),
+                    ),
+                  ),
+                  const SizedBox(width: 15),
+                  Row(
+                    children: [
+                      const Icon(Icons.star),
+                      Text('${recipeDetail.rating}')
+                    ],
+                  )
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                recipeDetail.description,
+                style: const TextStyle(
+                    fontWeight: FontWeight.normal, fontSize: 18),
+              ),
+            ],
+          ),
+        )
+      ],
     );
   }
 }
