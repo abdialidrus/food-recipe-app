@@ -112,7 +112,9 @@ class RecipeList extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const FoodRecipeDetailPage()));
+                        builder: (context) => FoodRecipeDetailPage(
+                              foodRecipe: recipeList[index],
+                            )));
               },
               child: Column(
                 mainAxisSize: MainAxisSize.min,
