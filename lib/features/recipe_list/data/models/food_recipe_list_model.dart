@@ -3,7 +3,7 @@ import 'package:food_recipe/features/recipe_list/domain/entities/food_recipe_lis
 class FoodRecipeListModel extends FoodRecipeList {
   const FoodRecipeListModel({
     required int count,
-    required String next,
+    required String? next,
     required String? previous,
     required List<FoodRecipe> result,
   }) : super(count: count, next: next, previous: previous, result: result);

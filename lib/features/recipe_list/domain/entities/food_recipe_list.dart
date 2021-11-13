@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 
 class FoodRecipeList extends Equatable {
   final int count;
-  final String next;
+  final String? next;
   final String? previous;
   final List<FoodRecipe> result;
 
