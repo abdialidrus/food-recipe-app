@@ -94,16 +94,53 @@ class _FoodRecipeListPageState extends State<FoodRecipeListPage> {
   }
 }
 
-class RecipeList extends StatelessWidget {
+class RecipeList extends StatefulWidget {
   final List<FoodRecipe> recipeList;
 
   const RecipeList({Key? key, required this.recipeList}) : super(key: key);
 
   @override
+  _RecipeListState createState() => _RecipeListState();
+}
+
+class _RecipeListState extends State<RecipeList> {
+  final _listScrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _listScrollController.addListener(() {
+      if (_listScrollController.position.pixels >=
+          _listScrollController.position.maxScrollExtent) {
+        _showToast(context);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _listScrollController.dispose();
+  }
+
+  void _showToast(BuildContext context) {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: const Text('you have reach the bottom of the list'),
+        action: SnackBarAction(
+            label: 'OK', onPressed: scaffold.hideCurrentSnackBar),
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Flexible(
       child: ListView.builder(
-        itemCount: recipeList.length,
+        controller: _listScrollController,
+        itemCount: widget.recipeList.length,
         itemBuilder: (context, index) {
           return Center(
               child: Padding(
@@ -119,7 +156,7 @@ class RecipeList extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => FoodRecipeDetailPage(
-                        foodRecipe: recipeList[index],
+                        foodRecipe: widget.recipeList[index],
                       ),
                     ),
                   );
@@ -137,14 +174,14 @@ class RecipeList extends StatelessWidget {
                         image: DecorationImage(
                           fit: BoxFit.cover,
                           image: NetworkImage(
-                            recipeList[index].featuredImage,
+                            widget.recipeList[index].featuredImage,
                           ),
                         ),
                       ),
                     ),
                     ListTile(
-                      title: Text(recipeList[index].title),
-                      subtitle: Text(recipeList[index].publisher),
+                      title: Text(widget.recipeList[index].title),
+                      subtitle: Text(widget.recipeList[index].publisher),
                     ),
                   ],
                 ),
