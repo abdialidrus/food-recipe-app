@@ -38,21 +38,18 @@ class _FoodRecipeListPageState extends State<FoodRecipeListPage> {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              const SizedBox(
-                height: 20,
-              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextField(
                   controller: _controller,
                   keyboardType: TextInputType.text,
                   decoration: const InputDecoration(
-                    labelText: "Search",
-                    hintText: "Search",
+                    labelText: "Search recipe",
+                    hintText: "Search recipe",
                     prefixIcon: Icon(Icons.search),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(
-                        Radius.circular(25.0),
+                        Radius.circular(8.0),
                       ),
                     ),
                   ),
@@ -63,9 +60,6 @@ class _FoodRecipeListPageState extends State<FoodRecipeListPage> {
                     searchRecipe();
                   },
                 ),
-              ),
-              const SizedBox(
-                height: 20,
               ),
               BlocBuilder<FoodRecipeListBloc, FoodRecipeListState>(
                 builder: (context, state) {
@@ -106,39 +100,45 @@ class RecipeList extends StatelessWidget {
         itemCount: recipeList.length,
         itemBuilder: (context, index) {
           return Center(
-              child: Card(
-            child: InkWell(
-              onTap: () {
-                Navigator.push(
+              child: Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Card(
+              elevation: 5,
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => FoodRecipeDetailPage(
-                              foodRecipe: recipeList[index],
-                            )));
-              },
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    height: 200.0,
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(5),
-                        topRight: Radius.circular(5),
+                      builder: (context) => FoodRecipeDetailPage(
+                        foodRecipe: recipeList[index],
                       ),
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: NetworkImage(
-                          recipeList[index].featuredImage,
+                    ),
+                  );
+                },
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      height: 200.0,
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(5),
+                          topRight: Radius.circular(5),
+                        ),
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: NetworkImage(
+                            recipeList[index].featuredImage,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  ListTile(
-                    title: Text(recipeList[index].title),
-                    subtitle: Text(recipeList[index].publisher),
-                  )
-                ],
+                    ListTile(
+                      title: Text(recipeList[index].title),
+                      subtitle: Text(recipeList[index].publisher),
+                    ),
+                  ],
+                ),
               ),
             ),
           ));
