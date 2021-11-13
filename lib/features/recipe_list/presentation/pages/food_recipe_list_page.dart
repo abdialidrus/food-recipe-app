@@ -27,6 +27,12 @@ class _FoodRecipeListPageState extends State<FoodRecipeListPage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -103,7 +109,10 @@ class RecipeList extends StatelessWidget {
               child: Padding(
             padding: const EdgeInsets.all(5.0),
             child: Card(
-              elevation: 5,
+              elevation: 8,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
               child: InkWell(
                 onTap: () {
                   Navigator.push(
@@ -122,8 +131,8 @@ class RecipeList extends StatelessWidget {
                       height: 200.0,
                       decoration: BoxDecoration(
                         borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(5),
-                          topRight: Radius.circular(5),
+                          topLeft: Radius.circular(8),
+                          topRight: Radius.circular(8),
                         ),
                         image: DecorationImage(
                           fit: BoxFit.cover,
