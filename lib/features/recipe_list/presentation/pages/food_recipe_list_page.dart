@@ -20,7 +20,7 @@ class _FoodRecipeListPageState extends State<FoodRecipeListPage> {
   @override
   void initState() {
     const page = 1;
-    query = 'chicken';
+    query = '';
     foodRecipeListBloc = BlocProvider.of<FoodRecipeListBloc>(context);
     foodRecipeListBloc.add(GetFoodRecipeListEvent(page, query));
     super.initState();
