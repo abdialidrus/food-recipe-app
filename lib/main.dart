@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_recipe/features/recipe_detail/presentation/bloc/food_recipe_detail_bloc.dart';
 import 'package:food_recipe/features/recipe_list/presentation/pages/food_recipe_list_page.dart';
 import 'features/recipe_list/presentation/bloc/food_recipe_list_bloc.dart';
-import 'injection_container.dart' as di;
+import 'di/injection_container.dart' as di;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
