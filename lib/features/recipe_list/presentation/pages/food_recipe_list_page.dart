@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_recipe/features/recipe_detail/presentation/pages/food_recipe_detail_page.dart';
@@ -75,7 +76,7 @@ class _FoodRecipeListPageState extends State<FoodRecipeListPage> {
                     return Text(state.message);
                   } else if (state is Loaded) {
                     return RecipeList(
-                      recipeList: state.recipeList.result,
+                      recipeList: state.recipeList,
                     );
                   } else {
                     return const Text('unexpected error');
@@ -164,21 +165,47 @@ class _RecipeListState extends State<RecipeList> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Container(
+                    CachedNetworkImage(
                       height: 200.0,
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(8),
-                          topRight: Radius.circular(8),
-                        ),
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: NetworkImage(
-                            widget.recipeList[index].featuredImage,
+                      imageUrl: widget.recipeList[index].featuredImage,
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                            // colorFilter: const ColorFilter.mode(
+                            //     Colors.red, BlendMode.colorBurn),
+                          ),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(8),
+                            topRight: Radius.circular(8),
                           ),
                         ),
                       ),
+                      placeholder: (context, url) =>
+                          const Center(child: CircularProgressIndicator()),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
                     ),
+                    // CachedNetworkImage(
+                    //     height: 200.0,
+                    //     fit: BoxFit.cover,
+                    //     imageUrl: widget.recipeList[index].featuredImage),
+                    // Container(
+                    //   height: 200.0,
+                    //   decoration: BoxDecoration(
+                    //     borderRadius: const BorderRadius.only(
+                    //       topLeft: Radius.circular(8),
+                    //       topRight: Radius.circular(8),
+                    //     ),
+                    //     image: DecorationImage(
+                    //       fit: BoxFit.cover,
+                    //       image: NetworkImage(
+                    //         widget.recipeList[index].featuredImage,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                     ListTile(
                       title: Text(widget.recipeList[index].title),
                       subtitle: Text(widget.recipeList[index].publisher),

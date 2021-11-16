@@ -12,7 +12,7 @@ class Initial extends FoodRecipeListState {}
 class Loading extends FoodRecipeListState {}
 
 class Loaded extends FoodRecipeListState {
-  final FoodRecipeList recipeList;
+  final List<FoodRecipe> recipeList;
 
   const Loaded({required this.recipeList});
 

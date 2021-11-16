@@ -4,6 +4,7 @@ import 'package:food_recipe/features/recipe_detail/data/repositories/food_recipe
 import 'package:food_recipe/features/recipe_detail/domain/repositories/food_recipe_detail_repository.dart';
 import 'package:food_recipe/features/recipe_detail/domain/usecases/get_food_recipe_detail.dart';
 import 'package:food_recipe/features/recipe_detail/presentation/bloc/food_recipe_detail_bloc.dart';
+import 'package:food_recipe/features/recipe_list/data/datasources/food_recipe_list_local_data_source.dart';
 import 'package:food_recipe/features/recipe_list/data/datasources/food_recipe_list_remote_data_source.dart';
 import 'package:food_recipe/features/recipe_list/data/repositories/food_recipe_list_repository_impl.dart';
 import 'package:food_recipe/features/recipe_list/domain/repositories/food_recipe_list_repository.dart';
@@ -25,10 +26,13 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetFoodRecipeList(sl()));
   // Repository
   sl.registerLazySingleton<FoodRecipeListRepository>(() =>
-      FoodRecipeListRepositoryImpl(remoteDataSource: sl(), networkInfo: sl()));
+      FoodRecipeListRepositoryImpl(
+          remoteDataSource: sl(), localDataSource: sl(), networkInfo: sl()));
   // Data sources
   sl.registerLazySingleton<FoodRecipeListRemoteDataSource>(
       () => FoodRecipeListRemoteDataSourceImpl(client: sl()));
+  sl.registerLazySingleton<FoodRecipeListLocalDataSource>(
+      () => FoodRecipeListLocalDataSourceImpl());
 
   //! Features - Food Recipe Detail
   // BloC
