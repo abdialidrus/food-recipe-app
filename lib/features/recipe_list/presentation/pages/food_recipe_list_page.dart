@@ -187,25 +187,6 @@ class _RecipeListState extends State<RecipeList> {
                       errorWidget: (context, url, error) =>
                           const Icon(Icons.error),
                     ),
-                    // CachedNetworkImage(
-                    //     height: 200.0,
-                    //     fit: BoxFit.cover,
-                    //     imageUrl: widget.recipeList[index].featuredImage),
-                    // Container(
-                    //   height: 200.0,
-                    //   decoration: BoxDecoration(
-                    //     borderRadius: const BorderRadius.only(
-                    //       topLeft: Radius.circular(8),
-                    //       topRight: Radius.circular(8),
-                    //     ),
-                    //     image: DecorationImage(
-                    //       fit: BoxFit.cover,
-                    //       image: NetworkImage(
-                    //         widget.recipeList[index].featuredImage,
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
                     ListTile(
                       title: Text(widget.recipeList[index].title),
                       subtitle: Text(widget.recipeList[index].publisher),
