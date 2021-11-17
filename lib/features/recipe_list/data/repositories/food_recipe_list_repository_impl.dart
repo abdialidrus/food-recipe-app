@@ -36,7 +36,7 @@ class FoodRecipeListRepositoryImpl implements FoodRecipeListRepository {
       }
     } else {
       try {
-        final localRecipes = await localDataSource.getFoodRecipes();
+        final localRecipes = await localDataSource.getFoodRecipes(query);
         return Right(localRecipes);
       } on CacheException {
         return Left(CacheFailure());
