@@ -10,9 +10,10 @@ abstract class FoodRecipeListLocalDataSource {
 class FoodRecipeListLocalDataSourceImpl extends FoodRecipeListLocalDataSource {
   @override
   Future<List<FoodRecipeTable>> getFoodRecipes(String query) async {
-    final Box<FoodRecipeTable>? recipeBox = await Hive.openBox('recipeBox');
+    final Box<FoodRecipeTable>? recipeBox =
+        await Hive.openBox<FoodRecipeTable>('recipeBox');
     List<FoodRecipeTable> recipes = [];
-    if (query.contains('')) {
+    if (query.isEmpty) {
       if (recipeBox != null) {
         final recipeIds = recipeBox.keys;
         for (var recipeId in recipeIds) {
