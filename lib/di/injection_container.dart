@@ -1,4 +1,5 @@
 import 'package:data_connection_checker_tv/data_connection_checker.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:food_recipe/features/recipe_detail/data/datasources/food_recipe_detail_data_source.dart';
 import 'package:food_recipe/features/recipe_detail/data/repositories/food_recipe_detail_repository_impl.dart';
 import 'package:food_recipe/features/recipe_detail/domain/repositories/food_recipe_detail_repository.dart';
@@ -10,6 +11,11 @@ import 'package:food_recipe/features/recipe_list/data/repositories/food_recipe_l
 import 'package:food_recipe/features/recipe_list/domain/repositories/food_recipe_list_repository.dart';
 import 'package:food_recipe/features/recipe_list/domain/usecases/get_food_recipe_list.dart';
 import 'package:food_recipe/features/recipe_list/presentation/bloc/food_recipe_list_bloc.dart';
+import 'package:food_recipe/features/splash_screen/data/datasources/auth_status_local_data_source.dart';
+import 'package:food_recipe/features/splash_screen/data/repositories/auth_status_repository_impl.dart';
+import 'package:food_recipe/features/splash_screen/domain/repositories/auth_status_repository.dart';
+import 'package:food_recipe/features/splash_screen/domain/usecases/get_user_auth_status.dart';
+import 'package:food_recipe/features/splash_screen/presentation/bloc/splash_screen_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -19,6 +25,18 @@ import '../core/network/network_info.dart';
 final sl = GetIt.instance;
 
 Future<void> init() async {
+  //! Features - Splash Screen
+  // Bloc
+  sl.registerFactory(() => SplashScreenBloc(getUserAuthStatus: sl()));
+  // Use cases
+  sl.registerLazySingleton(() => GetUserAuthStatus(sl()));
+  // Repository
+  sl.registerLazySingleton<AuthStatusRepository>(
+      () => AuthStatusRepositoryImpl(localDataSource: sl()));
+  // Data sources
+  sl.registerLazySingleton<AuthStatusLocalDataSource>(
+      () => AuthStatusLocalDataSourceImpl(sessionManager: sl()));
+
   //! Features - Food Recipe List
   // Bloc
   sl.registerFactory(() => FoodRecipeListBloc(getFoodRecipeList: sl()));
@@ -55,4 +73,6 @@ Future<void> init() async {
   sl.registerLazySingleton(() => sharedPreferences);
   sl.registerLazySingleton(() => http.Client());
   sl.registerLazySingleton(() => DataConnectionChecker());
+  final sessionManager = SessionManager();
+  sl.registerLazySingleton(() => sessionManager);
 }

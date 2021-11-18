@@ -30,9 +30,9 @@ class FoodRecipeDetailBloc
   }
 
   Stream<FoodRecipeDetailState> _eitherLoadedOrErrorState(
-    Either<Failure, FoodRecipeDetail> failureOrTrivia,
+    Either<Failure, FoodRecipeDetail> failureOrRecipeDetail,
   ) async* {
-    yield failureOrTrivia.fold(
+    yield failureOrRecipeDetail.fold(
       (failure) => Error(message: _mapFailureToMessage(failure)),
       (recipeDetail) => Loaded(recipeDetail: recipeDetail),
     );

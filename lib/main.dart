@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_recipe/features/recipe_detail/presentation/bloc/food_recipe_detail_bloc.dart';
 import 'package:food_recipe/features/recipe_list/data/tables/food_recipe_table.dart';
 import 'package:food_recipe/features/recipe_list/presentation/pages/food_recipe_list_page.dart';
+import 'package:food_recipe/features/splash_screen/presentation/bloc/splash_screen_bloc.dart';
+import 'package:food_recipe/features/splash_screen/presentation/pages/splash_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'features/recipe_list/presentation/bloc/food_recipe_list_bloc.dart';
 import 'di/injection_container.dart' as di;
@@ -24,6 +26,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider<SplashScreenBloc>(
+            create: (_) => di.sl<SplashScreenBloc>()),
         BlocProvider<FoodRecipeListBloc>(
             create: (_) => di.sl<FoodRecipeListBloc>()),
         BlocProvider<FoodRecipeDetailBloc>(
@@ -38,7 +42,7 @@ class MyApp extends StatelessWidget {
             secondary: Colors.red.shade600,
           ),
         ),
-        home: const FoodRecipeListPage(),
+        home: const SplashScreen(),
       ),
     );
   }
