@@ -1,4 +1,5 @@
 import 'package:flutter_session_manager/flutter_session_manager.dart';
+import 'package:food_recipe/core/error/exceptions.dart';
 import 'package:food_recipe/features/splash_screen/data/models/auth_status_model.dart';
 
 abstract class AuthStatusLocalDataSource {
@@ -12,8 +13,11 @@ class AuthStatusLocalDataSourceImpl extends AuthStatusLocalDataSource {
 
   @override
   Future<AuthStatusModel> getAuthStatus() async {
-    await sessionManager.set('authStatus', false);
-    final bool isUserAuthenticated = await sessionManager.get('authStatus');
-    return AuthStatusModel(isUserAuthenticated: isUserAuthenticated);
+    final isUserAuthenticated = await sessionManager.get('authStatus');
+    if (isUserAuthenticated != null) {
+      return AuthStatusModel(isUserAuthenticated: isUserAuthenticated);
+    } else {
+      return AuthStatusModel(isUserAuthenticated: false);
+    }
   }
 }

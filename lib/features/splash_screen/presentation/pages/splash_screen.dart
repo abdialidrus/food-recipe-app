@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:food_recipe/features/login/presentation/pages/login.dart';
 import 'package:food_recipe/features/recipe_list/presentation/pages/food_recipe_list_page.dart';
 import 'package:food_recipe/features/splash_screen/presentation/bloc/splash_screen_bloc.dart';
 
@@ -34,9 +35,9 @@ class _SplashScreenState extends State<SplashScreen> {
           return BuildSplashScreen();
         } else if (state is Loaded) {
           if (state.authStatus.isUserAuthenticated) {
-            return FoodRecipeListPage();
+            return const FoodRecipeListPage();
           } else {
-            return const Center(child: Text('unauthorized'));
+            return const LoginPage();
           }
         } else {
           return const Center(child: Text('error'));
