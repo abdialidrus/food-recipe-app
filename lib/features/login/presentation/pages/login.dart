@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food_recipe/features/login/presentation/widget/bezier_container.dart';
+import 'package:provider/provider.dart';
+
+import '../../google_sign_in.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -113,50 +117,46 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _facebookButton() {
+  Widget _googleButton() {
     return Container(
       height: 50,
-      margin: const EdgeInsets.symmetric(vertical: 20),
+      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            flex: 1,
-            child: Container(
-              decoration: const BoxDecoration(
-                color: Color(0xff1959a9),
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(5),
-                    topLeft: Radius.circular(5)),
-              ),
-              alignment: Alignment.center,
-              child: const Text('f',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 25,
-                      fontWeight: FontWeight.w400)),
-            ),
-          ),
-          Expanded(
-            flex: 5,
-            child: Container(
-              decoration: const BoxDecoration(
-                color: Color(0xff2872ba),
-                borderRadius: BorderRadius.only(
-                    bottomRight: Radius.circular(5),
-                    topRight: Radius.circular(5)),
-              ),
-              alignment: Alignment.center,
-              child: const Text('Log in with Facebook',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400)),
-            ),
-          ),
-        ],
+      child: ElevatedButton.icon(
+        style: ElevatedButton.styleFrom(
+          primary: Colors.white,
+          onPrimary: Colors.black,
+          minimumSize: const Size(double.infinity, 50),
+        ),
+        icon: const FaIcon(FontAwesomeIcons.google, color: Colors.red),
+        label: const Text('Log in with Google'),
+        onPressed: () {
+          final provider =
+              Provider.of<GoogleSignInProvider>(context, listen: false);
+          provider.googleLogin();
+        },
+      ),
+    );
+  }
+
+  Widget _facebookButton() {
+    return Container(
+      height: 50,
+      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+      child: ElevatedButton.icon(
+        style: ElevatedButton.styleFrom(
+          primary: Colors.white,
+          onPrimary: Colors.black,
+          minimumSize: const Size(double.infinity, 50),
+        ),
+        icon: const FaIcon(FontAwesomeIcons.facebook, color: Colors.blue),
+        label: const Text('Log in with Facebook'),
+        onPressed: () {},
       ),
     );
   }
@@ -254,7 +254,8 @@ class _LoginPageState extends State<LoginPage> {
                               fontSize: 14, fontWeight: FontWeight.w500)),
                     ),
                     _divider(),
-                    _facebookButton(),
+                    //_facebookButton(),
+                    _googleButton(),
                     SizedBox(height: height * .055),
                     _createAccountLabel(),
                   ],
